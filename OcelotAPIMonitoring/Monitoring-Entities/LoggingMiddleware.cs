@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -56,7 +56,7 @@ namespace OcelotAPIMonitoring.Monitoring_Entities
 
             builder.Append("Request: ").AppendLine(request);
             builder.AppendLine("Request headers: ");
-            foreach(var header in context.Request.Headers)
+            foreach (var header in context.Request.Headers)
             {
                 builder.Append(header.Key).Append(':').AppendLine(header.Value);
             }

@@ -43,10 +43,10 @@ namespace OcelotAPIMonitoring
                         .WriteTo.File(@"Logs\log.txt", rollingInterval: RollingInterval.Day);
                    }
                    ).Configure(app =>
-                    {
-                        app.UseMiddleware<LoggingMiddleware>();
-                        app.UseOcelot().Wait();
-                    }
+                   {
+                       app.UseMiddleware<LoggingMiddleware>();
+                       app.UseOcelot().Wait();
+                   }
                    );
             var host = builder.Build();
             return host;
