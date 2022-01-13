@@ -25,7 +25,7 @@ namespace OcelotAPIMonitoring
 
             builder.ConfigureAppConfiguration(
                     ic => ic.AddJsonFile(Path.Combine("Configuration",
-                                                      "configuration.json")))
+                                                      "Configuration.json")))
                    .ConfigureServices(
                         s =>
                         {
