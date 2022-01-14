@@ -1,28 +1,31 @@
 {
-  "ReRoutes": [
+  "Routes": [
     {
-      "DownstreamPathTemplate": "/api/Customers",
+      "DownstreamPathTemplate": "/api/Customers/GetAllCustomer",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "13686"
+          "Port": 13686
         }
       ],
       "UpstreamPathTemplate": "/Customers",
       "UpstreamHttpMethod": [ "GET" ]
     },
     {
-      "DownstreamPathTemplate": "/api/Products",
+      "DownstreamPathTemplate": "/api/Products/GetAllProducts",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": "21247"
+          "Port": 21247
         }
       ],
       "UpstreamPathTemplate": "/Products",
       "UpstreamHttpMethod": [ "GET" ]
     }
-  ]
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:54153"
+  }
 }

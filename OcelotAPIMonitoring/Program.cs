@@ -19,41 +19,56 @@ namespace OcelotAPIMonitoring
 {
     public class Program
     {
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            var builder = WebHost.CreateDefaultBuilder(args);
+        //public static IWebHost BuildWebHost(string[] args)
+        //{
+        //    var builder = WebHost.CreateDefaultBuilder(args);
 
-            builder.ConfigureAppConfiguration(
-                    ic => ic.AddJsonFile(Path.Combine("Configuration",
-                                                      "Configuration.json")))
-                   .ConfigureServices(
-                        s =>
-                        {
-                            s.AddSingleton(builder);
-                            s.AddOcelot();
-                        }
-                    )
-                   .UseStartup<Startup>()
-                   .UseSerilog((_, config) =>
+        //    builder.ConfigureAppConfiguration(
+        //            ic => ic.AddJsonFile(Path.Combine("Configuration",
+        //                                              "Configuration.json")))
+        //           .ConfigureServices(
+        //                s =>
+        //                {
+        //                    s.AddSingleton(builder);
+        //                    s.AddOcelot();
+        //                }
+        //            )
+        //           .UseStartup<Startup>()
+        //           .UseSerilog((_, config) =>
+        //           {
+        //               config
+        //                .MinimumLevel.Information()
+        //                .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+        //                .Enrich.FromLogContext()
+        //                .WriteTo.File(@"Logs\log.txt", rollingInterval: RollingInterval.Day);
+        //           }
+        //           ).Configure(app =>
+        //           {
+        //               app.UseMiddleware<LoggingMiddleware>();
+        //               app.UseOcelot().Wait();
+        //           }
+        //           );
+        //    var host = builder.Build();
+        //    return host;
+        //}
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(ic => ic.AddJsonFile("ocelot.json"))
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseSerilog((_, config) =>
                    {
                        config
                         .MinimumLevel.Information()
                         .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
                         .Enrich.FromLogContext()
                         .WriteTo.File(@"Logs\log.txt", rollingInterval: RollingInterval.Day);
-                   }
-                   ).Configure(app =>
-                   {
-                       app.UseMiddleware<LoggingMiddleware>();
-                       app.UseOcelot().Wait();
-                   }
-                   );
-            var host = builder.Build();
-            return host;
-        }
-        public static void Main(string[] args)
-        {
-            BuildWebHost(args).Run();
-        }
+                   }).UseStartup<Startup>();
+                });
     }
 }
