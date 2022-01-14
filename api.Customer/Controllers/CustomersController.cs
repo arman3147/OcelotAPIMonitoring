@@ -9,22 +9,19 @@ using System.Threading.Tasks;
 namespace api.Customer.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class CustomersController : ControllerBase
     {
-
-        private readonly ILogger<CustomersController> _logger;
         private readonly ICustomerRepository _customerRepository;
         
 
-        public CustomersController(ILogger<CustomersController> logger,ICustomerRepository customerRepository)
+        public CustomersController(ICustomerRepository customerRepository)
         {
-            _logger = logger;
             _customerRepository = customerRepository;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Models.Customer>>> Get()
+        public async Task<ActionResult<List<Models.Customer>>> GetAllCustomer()
         {
             return await _customerRepository.GetAllCustomer();
         }
