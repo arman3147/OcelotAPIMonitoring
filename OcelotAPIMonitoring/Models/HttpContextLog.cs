@@ -9,7 +9,7 @@ namespace OcelotAPIMonitoring.Models
     {
         public Guid Id { get; set; }
 
-        public string SourceIP { get; set; }
+        public string UpstreamGatewayURL { get; set; }
 
         public string RequestHeaders { get; set; }
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OcelotAPIMonitoring;
 
 namespace OcelotAPIMonitoring.Migrations
 {
     [DbContext(typeof(LoggerDbContext))]
-    partial class LoggerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220114200607_AddUpstreamGatewayUrlColumnToHttpContextLogTable")]
+    partial class AddUpstreamGatewayUrlColumnToHttpContextLogTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,6 +40,9 @@ namespace OcelotAPIMonitoring.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ResponseHeaders")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SourceIP")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpstreamGatewayURL")

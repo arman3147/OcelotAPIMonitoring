@@ -15,6 +15,10 @@ using System.Threading.Tasks;
 using Serilog;
 using OcelotAPIMonitoring.Monitoring_Entities;
 using Ocelot.Middleware;
+using OcelotAPIMonitoring.Monitoring_Middlewares;
+using OcelotAPIMonitoring.Repository.Interfaces;
+using OcelotAPIMonitoring.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace OcelotAPIMonitoring
 {
@@ -31,6 +35,8 @@ namespace OcelotAPIMonitoring
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOcelot();
+            services.AddScoped<ILoggerRepository, LoggerRepository>();
+            services.AddDbContext<LoggerDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("LoggerConnectionString")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,12 +48,15 @@ namespace OcelotAPIMonitoring
             }
             app.UseRouting();
 
-            app.UseMiddleware<LoggingMiddleware>();
+            app.UseMiddleware<IPConfigurationMiddleware>();
+            app.UseMiddleware<FileLoggerMiddleware>();
+            app.UseMiddleware<DBLoggerMiddleware>();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            //ocelot
+
             await app.UseOcelot();
         }
     }

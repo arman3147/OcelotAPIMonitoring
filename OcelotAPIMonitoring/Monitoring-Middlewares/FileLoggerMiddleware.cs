@@ -9,42 +9,15 @@ using System.Threading.Tasks;
 
 namespace OcelotAPIMonitoring.Monitoring_Entities
 {
-    public class LoggingMiddleware
+    public class FileLoggerMiddleware
     {
-        private readonly ILogger<LoggingMiddleware> _logger;
+        private readonly ILogger<FileLoggerMiddleware> _logger;
         private readonly RequestDelegate _next;
 
-        public LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> logger)
+        public FileLoggerMiddleware(RequestDelegate next, ILogger<FileLoggerMiddleware> logger)
         {
             _next = next;
             _logger = logger;
-        }
-
-        public async Task<string> FormatRequest(HttpRequest request)
-        {
-            using var reader = new StreamReader(
-                request.Body,
-                encoding: Encoding.UTF8,
-                detectEncodingFromByteOrderMarks: false,
-                leaveOpen: true);
-            var body = await reader.ReadToEndAsync();
-
-            var formattedRequest = $"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {body}";
-
-            request.Body.Position = 0;
-
-            return formattedRequest;
-        }
-
-        public async Task<string> FormatResponse(HttpResponse response)
-        {
-            response.Body.Seek(0, SeekOrigin.Begin);
-
-            string text = await new StreamReader(response.Body).ReadToEndAsync();
-
-            response.Body.Seek(0, SeekOrigin.Begin);
-
-            return $"{response.StatusCode}: {text}";
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -81,5 +54,34 @@ namespace OcelotAPIMonitoring.Monitoring_Entities
 
             await responseBody.CopyToAsync(orginalBodyStream);
         }
+
+        public async Task<string> FormatRequest(HttpRequest request)
+        {
+            using var reader = new StreamReader(
+                request.Body,
+                encoding: Encoding.UTF8,
+                detectEncodingFromByteOrderMarks: false,
+                leaveOpen: true);
+            var body = await reader.ReadToEndAsync();
+
+            var formattedRequest = $"{request.Scheme} {request.Host}{request.Path} {request.QueryString} {body}";
+
+            request.Body.Position = 0;
+
+            return formattedRequest;
+        }
+
+        public async Task<string> FormatResponse(HttpResponse response)
+        {
+            response.Body.Seek(0, SeekOrigin.Begin);
+
+            string text = await new StreamReader(response.Body).ReadToEndAsync();
+
+            response.Body.Seek(0, SeekOrigin.Begin);
+
+            return $"{response.StatusCode}: {text}";
+        }
+
+        
     }
 }
